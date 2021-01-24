@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectName>memento1</ProjectName>
     <ProjectGuid>{DF962448-8147-46BF-921C-9C74F33C6970}</ProjectGuid>
-    <RootNamespace>memento2</RootNamespace>
+    <RootNamespace>memento1</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

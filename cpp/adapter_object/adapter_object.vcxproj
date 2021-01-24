@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E04F93FC-18FD-4197-B887-6A73B190DBB0}</ProjectGuid>
-    <RootNamespace>adapter2</RootNamespace>
+    <RootNamespace>adapter_object</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>adapter_object</ProjectName>
   </PropertyGroup>

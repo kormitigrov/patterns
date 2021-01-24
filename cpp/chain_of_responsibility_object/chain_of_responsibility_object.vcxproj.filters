@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="chain_of_responsibility.cpp">
+    <ClCompile Include="chain_of_responsibility_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6B488861-36E4-4222-83F2-9CD733FFB2C2}</ProjectGuid>
-    <RootNamespace>iterator2</RootNamespace>
+    <RootNamespace>iterator1</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>iterator1</ProjectName>
   </PropertyGroup>

@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CE285848-3600-4B6F-A4EE-CDDBE07B08E5}</ProjectGuid>
-    <RootNamespace>factorymethod</RootNamespace>
+    <RootNamespace>factory_method</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>factory_method</ProjectName>
   </PropertyGroup>

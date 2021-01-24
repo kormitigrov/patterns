@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DF070B6F-49A3-4D8B-8DD2-03C767A833B6}</ProjectGuid>
-    <RootNamespace>templatemethod</RootNamespace>
+    <RootNamespace>template_method2</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>template_method2</ProjectName>
   </PropertyGroup>

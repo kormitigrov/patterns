@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B56FCAB2-45F7-44CD-9A1C-A19E02D1E729}</ProjectGuid>
+    <ProjectGuid>{67AC9E6C-319B-4EAA-B354-8A177EB7106A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>chainofresponsibility</RootNamespace>
-    <ProjectName>chain_of_responsibility</ProjectName>
+    <RootNamespace>chain_of_responsibility_class</RootNamespace>
+    <ProjectName>chain_of_responsibility_class</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -77,7 +77,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="chain_of_responsibility.cpp" />
+    <ClCompile Include="chain_of_responsibility_class.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

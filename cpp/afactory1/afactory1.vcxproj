@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DFD64B56-369D-4514-99B3-3411F41E2041}</ProjectGuid>
-    <RootNamespace>afactory</RootNamespace>
+    <RootNamespace>afactory1</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>afactory1</ProjectName>
   </PropertyGroup>
