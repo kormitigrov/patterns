@@ -8,10 +8,13 @@ using namespace std;
 class StorageImpl
 {
 public:
-	virtual float get(int index) = NULL;
-	virtual void set(int index, float value) = NULL;
-	virtual void insert(float value) = NULL;
-	virtual int size() = NULL;
+	virtual float get(int index) = 0;
+	virtual void set(int index, float value) = 0;
+	virtual void insert(float value) = 0;
+	virtual int size() = 0;
+	virtual ~StorageImpl()
+	{
+	}
 };
 
 class ListStorageImpl : public StorageImpl
@@ -19,7 +22,7 @@ class ListStorageImpl : public StorageImpl
 private:
 	list<float> values;
 public:
-	float get(int index)
+	float get(int index) override
 	{
 		for (list<float>::iterator i = values.begin(); i != values.end(); i++)
 			if (index == 0)
@@ -28,7 +31,7 @@ public:
 				index--;
 		return 0;
 	}
-	void set(int index, float value)
+	void set(int index, float value) override
 	{
 		for (list<float>::iterator i = values.begin(); i != values.end(); i++)
 			if (index == 0)
@@ -39,11 +42,11 @@ public:
 			else
 				index--;
 	}
-	void insert(float value)
+	void insert(float value) override
 	{
 		values.insert(values.begin(), value);
 	}
-	int size()
+	int size() override
 	{
 		return values.size();
 	}
@@ -54,19 +57,19 @@ class VectorStorageImpl : public StorageImpl
 private:
 	vector<float> values;
 public:
-	float get(int index)
+	float get(int index) override
 	{
 		return values[index];
 	}
-	void set(int index, float value)
+	void set(int index, float value) override
 	{
 		values[index] = value;
 	}
-	void insert(float value)
+	void insert(float value) override
 	{
 		values.insert(values.begin(), value);
 	}
-	int size()
+	int size() override
 	{
 		return values.size();
 	}
@@ -78,15 +81,11 @@ protected:
 	StorageImpl *impl;
 	int getset_cnt, insert_cnt;
 public:
-	Storage(StorageImpl *_impl = NULL)
+	Storage()
 	{
 		getset_cnt = 0;
 		insert_cnt = 0;
-
-		if (_impl != NULL)
-			impl = _impl;
-		else
-			impl = new ListStorageImpl();
+		impl = new ListStorageImpl();
 	}
 	float get(int index)
 	{
@@ -115,7 +114,7 @@ public:
 	}
 	void relocate()
 	{
-		if (getset_cnt > insert_cnt && dynamic_cast<ListStorageImpl*>(impl) != NULL)
+		if (getset_cnt > insert_cnt && dynamic_cast<ListStorageImpl*>(impl) != nullptr)
 		{
 			printf("Relocating List to Vector\n");
 			StorageImpl *new_impl = new VectorStorageImpl;
@@ -125,7 +124,7 @@ public:
 			impl = new_impl;
 		}
 
-		if (insert_cnt > getset_cnt && dynamic_cast<VectorStorageImpl*>(impl) != NULL)
+		if (insert_cnt > getset_cnt && dynamic_cast<VectorStorageImpl*>(impl) != nullptr)
 		{
 			printf("Relocating Vector to List\n");
 			StorageImpl *new_impl = new ListStorageImpl;
@@ -134,6 +133,10 @@ public:
 			delete impl;
 			impl = new_impl;
 		}
+	}
+	virtual ~Storage()
+	{
+		delete impl;
 	}
 };
 
@@ -157,7 +160,7 @@ public:
 
 void main()
 {
-	OrderedStorage storage;
+	{ OrderedStorage storage;
 
 	printf("Inserting values\n");
 	for (int i = 0; i < 5; i++)
@@ -181,6 +184,6 @@ void main()
 	printf("Accessing values once\n");
 	for (int i = 0; i < storage.size(); i++)
 		printf("%.1f\n", storage.get(i));
-
+	}
 	system("pause");
 }

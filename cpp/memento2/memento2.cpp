@@ -3,25 +3,23 @@
 
 using namespace std;
 
-// an abstract class, that _encapsulates_ a 'state' of the object
-class CState
+// an abstract class, that _encapsulates_ a 'state' of the abstract shape
+class CShapeState
 {
 public:
-	virtual ~CState() {};
+	virtual ~CShapeState() 
+	{
+	};
 };
 
 // an abstract memento - something that be used to store and retrieve
 // a state of the object
 class CShapeMemento
 {
-private:
-	friend class CShape;
-	// we can retrieve the state from every memento
-	virtual CState *getState() = NULL;
-	// and we can set state of every memento
-	virtual void setState(CState *state) = NULL;
 public:
-	virtual ~CShapeMemento() {};
+	virtual ~CShapeMemento() 
+	{
+	};
 };
 
 // an abstract object, whos state we will change and unchange back
@@ -30,16 +28,17 @@ class CShape
 public:
 	// a virtual method, to ask an object to write its current state
 	// into new memento object and return it to us
-	virtual CShapeMemento *createShapeMemento() = NULL;
+	virtual CShapeMemento *createShapeMemento() = 0;
 	// a virtual method, to give the object a memento it has created
 	// a long time ago, and to ask it to read its state from memento
-	virtual void updateFromMemento(CShapeMemento *memento) = NULL;
+	virtual void updateFromMemento(CShapeMemento *memento) = 0;
+	virtual ~CShape()
+	{
+	}
 };
 
-// ------------------------------------------------------------
-
 // a concrete class that _encapsulates_ a state of a point 
-class CPointState: public CState
+class CPointState : public CShapeState
 {
 private:
 	// it is a friend of a CPoint class, thus CPoint
@@ -50,7 +49,7 @@ private:
 
 // a concrete memento - something that be used to store and retrieve
 // a state of CPoint
-class CPointMemento: public CShapeMemento
+class CPointMemento : public CShapeMemento
 {
 private:
 	// it is a friend of a CPoint class, thus CPoint
@@ -58,87 +57,72 @@ private:
 	friend class CPoint;
 	// a memento stores a pointer to the object, that
 	// actually stores all data of the state
-	CPointState *_state;
+	CPointState _state;
 	// we can retrieve the state from every memento
-	virtual CState *getState()
+	CPointState getState()
 	{
 		// in this case we just return the state that is stored inside
 		return _state;
 	}
-	// and we can set state of every memento
-	virtual void setState(CState *state)
-	{
-		// if the state given is CPointState, we store it inside
-		if (dynamic_cast<CPointState*>(state) == NULL)
-			printf("CPointMemento::setState(state) error: state is not of CPointState class\n");
-		else
-			_state = dynamic_cast<CPointState*>(state);
-	}
 public:
 	// CPointMemento has only two public methods, thus data inside
 	// is invisible for anybody, but its friend, CPoint
-	CPointMemento()
+	CPointMemento(CPointState state)
 	{
-		_state = NULL;
+		printf("CPointMemento(CPointState state)\n");
+		_state = state;
 	}
-	virtual ~CPointMemento()
+	~CPointMemento()
 	{
-		delete _state;
+		printf("~CPointMemento()\n");
 	};
 };
 
 // an concrete CPoint, whos state we will change and unchange back
-class CPoint: public CShape
+class CPoint : public CShape
 {
 private:
-	int _x,_y;
+	CPointState state;
 public:
 	CPoint(int x, int y)
 	{
-		_x = x; _y = y;
+		printf("CPoint(int x, int y)\n");
+		state._x = x; state._y = y;
 	};
 	// a method to change the state of the object
 	void move(int dx, int dy)
 	{
-		_x = _x + dx; _y = _y + dy;
+		state._x = state._x + dx; state._y = state._y + dy;
 	};
 	// a method to report the state of the object
 	void report()
 	{
-		printf("CPoint is: %d %d\n", _x, _y);
+		printf("CPoint is: %d %d\n", state._x, state._y);
 	}
 	// we can ask a point to write its current state
 	// into new memento object and return it to us
-	virtual CShapeMemento *createShapeMemento()
+	CShapeMemento *createShapeMemento() override
 	{
 		// create a new memento
-		CPointMemento *memento = new CPointMemento();
-		// create a new state object
-		CPointState *state = new CPointState();
-		// store actual data inside state
-		state -> _x = _x; state -> _y = _y;
-		// store state inside memento
-		memento -> setState(state);
+		CPointMemento *memento = new CPointMemento(state);
 		// and return it
 		return memento;
 	}
 	// we can give the object a memento it has created
 	// a long time ago, and to ask it to read its state from memento
-	virtual void updateFromMemento(CShapeMemento *memento)
+	void updateFromMemento(CShapeMemento *memento) override
 	{
 		// if it is our own memento (of class CPointMemento)
-		if (dynamic_cast<CPointMemento*>(memento) == NULL)
-			printf("CPoint::updateFromMemento(memento) error: memento is not of CPointMemento class\n");
+		CPointMemento *ownmemento = dynamic_cast<CPointMemento*>(memento);
+		if (ownmemento != nullptr)
+			// get the state from memento 
+			state = ownmemento->getState();
 		else
-		{
-			// typecast memento to our own class
-			CPointMemento *ownmemento = dynamic_cast<CPointMemento*>(memento);
-			// get the state from memento and typecast it to our own class
-			CPointState *state = dynamic_cast<CPointState*>(ownmemento -> getState());
-			// read actual data from state
-			_x = state -> _x;
-			_y = state -> _y;
-		}
+			printf("CPoint::updateFromMemento(memento) error: memento is not of CPointMemento class\n");
+	}
+	~CPoint()
+	{
+		printf("~CPoint()\n");
 	}
 };
 

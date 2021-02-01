@@ -18,7 +18,7 @@ public:
 	// a function, returning the only existing copy of CZoo
 	static CZoo *getInstance()
 	{
-		if (_zoo == NULL)
+		if (_zoo == nullptr)
 			_zoo = new CZoo();
 		return _zoo;
 	}
@@ -28,8 +28,8 @@ public:
 		cout << "CZoo::doSomething()\n";
 	}
 };
-// a static variable is initialized to NULL
-CZoo *CZoo::_zoo = NULL;
+// a static variable is initialized to nullptr
+CZoo *CZoo::_zoo = nullptr;
 
 //----------------------------
 

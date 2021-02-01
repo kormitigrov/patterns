@@ -6,7 +6,10 @@ using namespace std;
 class Handler
 {
 public:
-	virtual bool handle(int request) = NULL;
+	virtual bool handle(int request) = 0;
+	virtual ~Handler() 
+	{
+	}
 };
 
 class DivisionChecker : public Handler
@@ -20,18 +23,23 @@ public:
 		value = _value;
 		next = _next;
 	}
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		if (request % value == 0)
 			return true;
 		else
 			return next->handle(request);
 	}
+	~DivisionChecker() override
+	{
+		if (next != nullptr)
+			delete next;
+	}
 };
 
 class DefaultHandler : public Handler
 {
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		printf("%d is prime\n", request);
 		return false;
@@ -46,5 +54,7 @@ void main()
 		if (queue->handle(i) == false)
 			queue = new DivisionChecker(i, queue);
 
+	delete queue;
+	
 	system("pause");
 }

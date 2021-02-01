@@ -5,9 +5,11 @@
 class CShape
 {
 public:
-	// 
-	virtual void save(FILE *stream) = NULL;
-	virtual void load(FILE *stream) = NULL;
+	virtual void save(FILE *stream) = 0;
+	virtual void load(FILE *stream) = 0;
+	virtual ~CShape()
+	{
+	}
 };
 
 #endif  // _SHAPE_H

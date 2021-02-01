@@ -7,8 +7,10 @@ using namespace std;
 class CShape
 {
 public:
-	virtual void draw() = NULL;
-	virtual ~CShape() {};
+	virtual void draw() = 0;
+	virtual ~CShape() 
+	{
+	};
 };
 
 class CPoint : public CShape
@@ -21,18 +23,18 @@ public:
 		printf("CPoint::CPoint(%d, %d)\n", x, y);
 		_x = x;	_y = y;
 	}
-	~CPoint()
-	{
-		printf("CPoint::~CPoint() : deleting (%d, %d)\n", _x, _y);
-	}
-	virtual void move(int dx, int dy)
+	void move(int dx, int dy)
 	{
 		printf("CPoint::move(%d, %d)\n", dx, dy);
 		_x = _x + dx; _y = _y + dy;
 	}
-	virtual void draw()
+	void draw() override
 	{
 		printf("(%d, %d)", _x, _y);
+	}
+	~CPoint()
+	{
+		printf("CPoint::~CPoint() : deleting (%d, %d)\n", _x, _y);
 	}
 };
 
@@ -46,16 +48,16 @@ public:
 		printf("CDecorator::CDecorator(CShape *shape)\n");
 		_shape = shape;
 	}
-	~CDecorator()
-	{
-		printf("CDecorator::~CDecorator()\n");
-		delete _shape;
-	}
 	virtual void draw()
 	{
 		printf("*");
 		_shape->draw();
 		printf("*");
+	}
+	~CDecorator()
+	{
+		printf("CDecorator::~CDecorator()\n");
+		delete _shape;
 	}
 };
 
@@ -68,11 +70,15 @@ void main()
 	shapes[2] = new CDecorator(new CDecorator(new CPoint(3, 3)));
 
 	for (vector<CShape*>::iterator i = shapes.begin(); i != shapes.end(); i++)
-		if (*i != NULL)
+		if (*i != nullptr)
 		{
 			(*i)->draw();
 			printf("\n");
 		}
+
+	for (vector<CShape*>::iterator i = shapes.begin(); i != shapes.end(); i++)
+		if (*i != nullptr)
+			delete *i;
 
 	system("pause");
 }

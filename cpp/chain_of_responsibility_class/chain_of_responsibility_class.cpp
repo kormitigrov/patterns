@@ -6,13 +6,13 @@ using namespace std;
 class Handler
 {
 public:
-	virtual bool handle(int request) = NULL;
+	virtual bool handle(int request) = 0;
 };
 
 class DefaultHandler : public Handler
 {
 public:
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		printf("%d is prime\n", request);
 		return false;
@@ -22,7 +22,7 @@ public:
 class DivisionChecker2 : public DefaultHandler
 {
 public:
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		if ((request % 2 == 0) && (request != 2))
 			return true;
@@ -34,7 +34,7 @@ public:
 class DivisionChecker3 : public DivisionChecker2
 {
 public:
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		if ((request % 3 == 0) && (request != 3))
 			return true;
@@ -46,7 +46,7 @@ public:
 class DivisionChecker5 : public DivisionChecker3
 {
 public:
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		if ((request % 5 == 0) && (request != 5))
 			return true;
@@ -58,7 +58,7 @@ public:
 class DivisionChecker7 : public DivisionChecker5
 {
 public:
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		if ((request % 7 == 0) && (request != 7))
 			return true;
@@ -67,24 +67,26 @@ public:
 	}
 };
 
-class DivisionChecker11 : public DivisionChecker7
+/*class DivisionChecker11 : public DivisionChecker7
 {
 public:
-	bool handle(int request)
+	bool handle(int request) override
 	{
 		if ((request % 11 == 0) && (request != 11))
 			return true;
 		else
 			return DivisionChecker7::handle(request);
 	}
-};
+};*/
 
 void main()
 {
-	Handler *queue = new DivisionChecker11();
+	Handler *queue = new DivisionChecker7();
 
 	for (int i = 2; i < 100; i++)
 		queue->handle(i);
+
+	delete queue;
 
 	system("pause");
 }

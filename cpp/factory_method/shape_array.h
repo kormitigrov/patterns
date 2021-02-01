@@ -12,6 +12,7 @@
 class CShapeArray
 {
 private:
+	int count;
 	CShape **_shapes;
 public:
 	// A virtual function that knows how to create objects 
@@ -23,7 +24,7 @@ public:
 	// will automatically be able to load them
 	virtual CShape *createShape(char code)
 	{
-		return NULL;
+		return nullptr;
 	}
 	// a function that loads an array of shapes from file
 	// it requires a filename only. It uses a method createShape
@@ -32,9 +33,8 @@ public:
 	{
 		FILE *stream;
 		// open the file for reading
-		if ((stream = fopen(filename, "r" )) != NULL)
+		if ((stream = fopen(filename, "r" )) != nullptr)
 		{
-			int count;
 			char code;
 			
 			// read the number of objects in the file
@@ -56,7 +56,7 @@ public:
 				// CCircle or CPoint, but here we do not
 				// know the concrete type, because we receive
 				// it as a pointer to CShape
-				if (_shapes[i] != NULL)
+				if (_shapes[i] != nullptr)
 				{
 					// if the object has been created, ask it
 					// to read itself from the file
@@ -65,6 +65,12 @@ public:
 			}
 			fclose(stream);
 		}
+	}
+	virtual ~CShapeArray()
+	{
+		for (int i = 0; i < count; i++)
+			delete (_shapes[i]);
+		delete[] _shapes;
 	}
 };
 

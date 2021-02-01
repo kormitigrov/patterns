@@ -6,7 +6,10 @@ using namespace std;
 class CFood
 {
 public:
-	virtual void prepare() = NULL;
+	virtual void prepare() = 0;
+	virtual ~CFood()
+	{
+	}
 };
 
 // an concrete food - a meat food
@@ -17,7 +20,7 @@ public:
 	{
 		cout << "CMeatFood::CMeatFood()\n";
 	}
-	virtual void prepare()
+	void prepare() override
 	{
 		cout << "CMeatFood::prepare()\n";
 	}
@@ -31,7 +34,7 @@ public:
 	{
 		cout << "CVegetarianFood::CVegetarianFood()\n";
 	}
-	virtual void prepare()
+	void prepare() override
 	{
 		cout << "CVegetarianFood::prepare()\n";
 	}
@@ -43,7 +46,10 @@ public:
 class CFoodFactory
 {
 public:
-	virtual CFood *createFood() = NULL;
+	virtual CFood *createFood() = 0;
+	virtual ~CFoodFactory()
+	{
+	}
 };
 
 // a concrete version of abstract food factory - 
@@ -55,7 +61,7 @@ public:
 	{
 		cout << "CMeatFoodFactory::CMeatFoodFactory()\n";
 	}
-	virtual CFood *createFood()
+	CFood *createFood() override
 	{
 		cout << "CMeatFoodFactory::createFood()\n";
 		return new CMeatFood();
@@ -71,7 +77,7 @@ public:
 	{
 		cout << "CVegetarianFoodFactory::CVegetarianFoodFactory()\n";
 	}
-	virtual CFood *createFood()
+	CFood *createFood() override
 	{
 		cout << "CVegetarianFoodFactory::createFood()\n";
 		return new CVegetarianFood();
@@ -90,6 +96,9 @@ public:
 	{
 		cout << "CAnimal::feed()\n";
 	}
+	virtual ~CAnimal()
+	{
+	}
 };
 
 //----------------------------
@@ -99,7 +108,7 @@ void main()
 	// creating a factory of food - 
 	// either CMeatFoodFactory or CVegetarianFoodFactory 
 	CFoodFactory *factory;
-	if (false)
+	if (rand() % 2 == 0)
 		factory = new CMeatFoodFactory();
 	else
 		factory = new CVegetarianFoodFactory();
@@ -119,6 +128,9 @@ void main()
 	// lets create an animal and feed it
 	CAnimal *student = new CAnimal();
 	student->feedWith(food);
+
+	delete food;
+	delete factory;
 	delete student;
 
 	system("pause");

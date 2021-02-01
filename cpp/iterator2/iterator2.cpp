@@ -16,7 +16,10 @@ class CContainer
 public:
 	// the abstract container can only create an iterator,
 	// which can be used to access its elements
-	virtual CIterator<Item> *createIterator() = NULL;
+	virtual CIterator<Item> *createIterator() = 0;
+	virtual ~CContainer()
+	{
+	}
 };
 
 // an abstract iterator - something, that allows to retrieve 
@@ -26,15 +29,18 @@ class CIterator
 {
 public:
 	// move to the first element
-	virtual void first() = NULL;
+	virtual void first() = 0;
 	// get current element
-	virtual Item getCurrentItem() = NULL;
+	virtual Item getCurrentItem() = 0;
 	// set current element
-	virtual void setCurrentItem(Item item) = NULL;
+	virtual void setCurrentItem(Item item) = 0;
 	// move to the next element
-	virtual void next() = NULL;
+	virtual void next() = 0;
 	// have we moved out of the elements in the list?
-	virtual bool isEOL() = NULL;
+	virtual bool isEOL() = 0;
+	virtual ~CIterator()
+	{
+	}
 };
 
 
@@ -77,6 +83,10 @@ public:
 		// a CArray known which iterator can access its data and creates it here
 		return new CArrayIterator<Item>(this);
 	}
+	virtual ~CArray()
+	{
+		delete[] _values;
+	}
 };
 
 // a concrete array iterator - something, that can retrieve elements from the
@@ -95,28 +105,28 @@ public:
 		_arr = arr;
 		_current_index = 0;
 	}
-	virtual void first()
+	void first() override
 	{
 		_current_index = 0;
 	}
-	virtual Item getCurrentItem()
+	Item getCurrentItem() override
 	{
 		if (!isEOL())
 			return _arr->getValue(_current_index);
 		else
 			return 0;
 	}
-	virtual void setCurrentItem(Item item)
+	void setCurrentItem(Item item) override
 	{
 		if (!isEOL())
 			_arr->setValue(_current_index, item);
 	}
-	virtual void next()
+	void next() override
 	{
 		if (!isEOL())
 			_current_index++;
 	}
-	virtual bool isEOL()
+	bool isEOL() override
 	{
 		return _current_index == _arr->getCount();
 	}
@@ -126,29 +136,29 @@ void main()
 {
 	// lets create an array of 'ints'
 	CArray<int> arr(10);
-	
+
 	// knowing that we have created CArray, we can manually 
 	// create an appropriate iterator, that is CArrayIterator:
-	
+
 	// CArrayIterator<int> *i = new CArrayIterator<int>(&arr);
-	
+
 	// but it's not very good, - we'd better ask an array itself
 	// to create an appropriate iterator for us - thus we do not
 	// have to know to what real container class 'arr' belongs to
 
 	CIterator<int> *i = arr.createIterator();
-	
+
 	// now we may use standard methods of CIterator to access 
 	// elements of our container; here we know nothing about
 	// exact class of 'arr' and 'i' - for us here it's just
 	// an abstract container and abstract class
-	for(i->first(); !i->isEOL(); i->next())
+	for (i->first(); !i->isEOL(); i->next())
 	{
 		i->setCurrentItem(rand());
 	}
-	
+
 	// again, iterate and access
-	for(i->first(); !i->isEOL(); i->next())
+	for (i->first(); !i->isEOL(); i->next())
 	{
 		printf("%d ", i->getCurrentItem());
 	}
@@ -156,6 +166,6 @@ void main()
 
 	// delete iterator
 	delete i;
-	
-	system("pause"); 
+
+	system("pause");
 }

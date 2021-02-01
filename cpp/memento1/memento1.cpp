@@ -75,10 +75,10 @@ public:
 		// read actual data from memento
 		memento -> getState(_x, _y);
 	}
+	virtual ~CPoint()
+	{
+	}
 };
-
-
-// ------------------------------------------------------------
 
 void main()
 {

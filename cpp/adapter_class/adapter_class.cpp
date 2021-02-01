@@ -8,9 +8,9 @@ class IArray
 {
 public:
 	// get the number of elements
-	virtual int getCount() = NULL;
+	virtual int getCount() = 0;
 	// get an element by index
-	virtual int getValue(int index) = NULL;
+	virtual int getValue(int index) = 0;
 };
 
 // lets create a real array of ints, that implements IArray
@@ -27,13 +27,17 @@ public:
 		for (int i = 0; i < _size; i++)
 			_values[i] = rand();
 	}
-	virtual int getCount()
+	int getCount() override
 	{
 		return _size;
 	}
-	virtual int getValue(int index)
+	int getValue(int index) override
 	{
 		return _values[index];
+	}
+	virtual ~CArray()
+	{
+		delete[] _values;
 	}
 };
 
@@ -42,13 +46,13 @@ class IList
 {
 public:
 	// move to the first element
-	virtual void first() = NULL;
+	virtual void first() = 0;
 	// get current value
-	virtual int currentValue() = NULL;
+	virtual int currentValue() = 0;
 	// move to the next element
-	virtual void next() = NULL;
+	virtual void next() = 0;
 	// have we moved out of the elements in the list?
-	virtual bool isEOL() = NULL;
+	virtual bool isEOL() = 0;
 };
 
 // the question is: if our program (a big program by that time) 
@@ -70,12 +74,12 @@ public:
 		_current_index = 0;
 	}
 	// all functions of IList are implemented by calling methods of CArray
-	virtual void first()
+	void first() override
 	{
 		_current_index = 0;
 	}
 	// all functions of IList are implemented by calling methods of CArray
-	virtual int currentValue()
+	int currentValue() override
 	{
 		if (!isEOL())
 			return getValue(_current_index);
@@ -83,15 +87,18 @@ public:
 			return 0;
 	}
 	// all functions of IList are implemented by calling methods of CArray
-	virtual void next()
+	void next() override
 	{
 		if (!isEOL())
 			_current_index++;
 	}
 	// all functions of IList are implemented by calling methods of CArray
-	virtual bool isEOL()
+	bool isEOL() override
 	{
 		return _current_index == getCount();
+	}
+	~CListAdapter() override
+	{
 	}
 };
 

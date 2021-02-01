@@ -9,15 +9,20 @@ class CGroup;
 class CHandler
 {
 public:
-	virtual void handlePoint(CPoint *p) = NULL;
-	virtual void handleGroup(CGroup *g) = NULL;
+	virtual void handlePoint(CPoint *p) = 0;
+	virtual void handleGroup(CGroup *g) = 0;
+	virtual ~CHandler()
+	{
+	}
 };
 
 class CShape
 {
 public:
-	virtual void Apply(CHandler *Handler) = NULL;
-	virtual ~CShape() {};
+	virtual void Apply(CHandler *Handler) = 0;
+	virtual ~CShape() 
+	{
+	};
 };
 
 class CPoint : public CShape
@@ -26,7 +31,7 @@ public:
 	int _x, _y;
 public:
 	CPoint(int x, int y) : _x(x), _y(y) {};
-	virtual void Apply(CHandler *Handler)
+	void Apply(CHandler *Handler) override
 	{
 		Handler->handlePoint(this);
 	}
@@ -44,7 +49,7 @@ public:
 		_maxcount = maxcount; _count = 0;
 		_shapes = new CShape*[_maxcount];
 		for (int i = 0; i < _maxcount; i++)
-			_shapes[i] = NULL;
+			_shapes[i] = nullptr;
 	}
 	~CGroup()
 	{
@@ -61,7 +66,7 @@ public:
 		_shapes[_count - 1] = shape;
 		return true;
 	}
-	virtual void Apply(CHandler *Handler)
+	void Apply(CHandler *Handler) override
 	{
 		Handler->handleGroup(this);
 	}
@@ -69,11 +74,11 @@ public:
 
 class CDrawer : public CHandler
 {
-	virtual void handlePoint(CPoint *p)
+	void handlePoint(CPoint *p) override
 	{
 		printf("CPoint drawing at (%d, %d)\n", p->_x, p->_y);
 	}
-	virtual void handleGroup(CGroup *g)
+	void handleGroup(CGroup *g) override
 	{
 		for (int i = 0; i < g->_count; i++)
 			g->_shapes[i]->Apply(this);
@@ -86,12 +91,12 @@ private:
 	int _dx, _dy;
 public:
 	CMover(int dx, int dy) : _dx(dx), _dy(dy) {};
-	virtual void handlePoint(CPoint *p)
+	void handlePoint(CPoint *p) override
 	{
 		printf("CPoint moving on (%d, %d)\n", _dx, _dy);
 		p->_x = p->_x + _dx; p->_y = p->_y + _dy;
 	}
-	virtual void handleGroup(CGroup *g)
+	void handleGroup(CGroup *g) override
 	{
 		for (int i = 0; i < g->_count; i++)
 			g->_shapes[i]->Apply(this);
@@ -112,9 +117,7 @@ void main()
 	CMover mv(10, 10);
 
 	shapes->Apply(&dr);
-
 	shapes->Apply(&mv);
-
 	shapes->Apply(&dr);
 
 	delete shapes;

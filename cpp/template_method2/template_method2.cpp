@@ -76,5 +76,10 @@ void main()
 	ax->TemplateMethod();
 	ay->TemplateMethod();
 
+	delete bx;
+	delete by;
+	delete ax;
+	delete ay;
+
 	system("pause");
 }

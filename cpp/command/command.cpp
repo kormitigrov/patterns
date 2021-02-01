@@ -26,25 +26,30 @@ public:
 	{
 		printf("CPoint is: %d %d\n", _x, _y);
 	}
+	virtual ~CPoint()
+	{
+	}
 };
 
 // an abstract command, that may be performed on a selected CPoint
 class Command
 {
 public:
-	virtual ~Command() {};
 	// every command has a main method 'execute'
 	// that should perform an action on the selected CPoint
-	virtual void execute(CPoint *selection) = NULL;
+	virtual void execute(CPoint *selection) = 0;
 	// every point has as well the method 'unexecute'
 	// that should undo an action
-	virtual void unexecute() = NULL;
+	virtual void unexecute() = 0;
 	// every command can be cloned
-	virtual Command *clone() = NULL;
+	virtual Command *clone() = 0;
+	virtual ~Command() 
+	{
+	};
 };
 
 // a concrete command, that moves the point
-class MoveCommand: public Command
+class MoveCommand : public Command
 {
 private:
 	// the command remembers the selection (the point) it was performed for
@@ -61,7 +66,7 @@ public:
 		printf("MoveCommand::MoveCommand(%d, %d)\n", dx, dy);
 		_dx = dx;
 		_dy = dy;
-		_selection = NULL;
+		_selection = nullptr;
 	}
 	// when the command executes, it moves the selection
 	virtual void execute(CPoint *selection)
@@ -70,7 +75,7 @@ public:
 		// remember the selection the command was applied to
 		_selection = selection;
 		// if it is not empty, call method move of the point
-		if (_selection != NULL)
+		if (_selection != nullptr)
 		{
 			_selection -> move(_dx, _dy);
 		}
@@ -80,7 +85,7 @@ public:
 	virtual void unexecute()
 	{
 		printf("MoveCommand::unexecute()\n");
-		if (_selection != NULL)
+		if (_selection != nullptr)
 		{
 			_selection -> move(-_dx, -_dy);
 		}
@@ -91,7 +96,7 @@ public:
 		printf("MoveCommand::clone()\n");
 		return new MoveCommand(_dx, _dy);
 	}
-	~MoveCommand() 
+	~MoveCommand() override
 	{
 		printf("MoveCommand::~MoveCommand()\n");
 	}
@@ -131,7 +136,7 @@ void main()
 		// take the command, associated with key, if there is one
 		Command *command = commands[key];
 		// if there IS a command, associated with a key
-		if (command != NULL)
+		if (command != nullptr)
 		{
 			// clone a command - we need to add it to history stack,
 			// so we need a copy of the original command
@@ -160,6 +165,19 @@ void main()
 		selection -> report();
 
 	} while (key != 27);
+
+	while (!history.empty())
+	{
+		delete history.top();
+		history.pop();
+	}
+
+	delete commands['a'];
+	delete commands['d'];
+	delete commands['w'];
+	delete commands['s'];
+
+	delete selection;
 
 	system("pause");
 }

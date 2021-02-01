@@ -8,8 +8,10 @@ using namespace std;
 class CShape
 {
 public:
-	virtual void draw() = NULL;
-	virtual ~CShape() {};
+	virtual void draw() = 0;
+	virtual ~CShape() 
+	{
+	};
 };
 
 class CPoint : public CShape
@@ -48,22 +50,22 @@ public:
 	{
 		printf("CProxyPoint::CProxyPoint(%d, %d)\n", x, y);
 		_x = x;	_y = y;
-		point = NULL;
-	}
-	~CProxyPoint()
-	{
-		printf("CProxyPoint::~CProxyPoint()\n");
-		if (point != NULL)
-			delete point;
+		point = nullptr;
 	}
 	virtual void draw()
 	{
 		printf("CProxyPoint::draw()\n");
 
-		if (point == NULL)
+		if (point == nullptr)
 			point = new CPoint(_x, _y);
 
 		point->draw();
+	}
+	~CProxyPoint()
+	{
+		printf("CProxyPoint::~CProxyPoint()\n");
+		if (point != nullptr)
+			delete point;
 	}
 };
 
@@ -75,8 +77,12 @@ void main()
 	shapes[2] = new CPoint(3, 3);
 
 	for (vector<CShape*>::iterator i = shapes.begin(); i != shapes.end(); i++)
-	if (*i != NULL)
+	if (*i != nullptr)
 		(*i)->draw();
+
+	for (vector<CShape*>::iterator i = shapes.begin(); i != shapes.end(); i++)
+	if (*i != nullptr)
+		delete *i;
 
 	system("pause");
 }

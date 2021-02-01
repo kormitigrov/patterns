@@ -5,6 +5,10 @@ using namespace std;
 // just an abstract object
 class CObject
 {
+public:
+	virtual ~CObject()
+	{
+	}
 };
 
 // just an array to store abstract objects
@@ -21,7 +25,7 @@ public:
 		_count = count;
 		_objects = new CObject*[_count];
 		for (int i = 0; i < _count; i++)
-			_objects[i] = NULL;
+			_objects[i] = nullptr;
 	}
 	// a virtual function to compare two objects, 
 	// it is used later by a template method
@@ -45,6 +49,16 @@ public:
 					_objects[i] = _objects[j];
 					_objects[j] = tmp;
 				}
+	}
+	// destructor
+	~CObjectArray()
+	{
+		// iterate through all objects and delete them
+		for (int i = 0; i < _count; i++)
+			if (_objects[i] != nullptr)
+				delete (_objects[i]);
+		// deallocate the memory
+		delete[] _objects;
 	}
 };
 
@@ -77,22 +91,22 @@ public:
 void main()
 {
 	// create an array and fill it
-	CNumberArray arr(10);
-	
+	{ CNumberArray arr(10);
+
 	for (int i = 0; i < arr._count; i++)
 	{
 		CNumber *number = new CNumber();
 		number->_value = rand();
 		arr._objects[i] = number;
 	}
-	
+
 	// call sorting procedure and check the results
 	arr.sort();
-	
+
 	for (int i = 0; i < arr._count; i++)
 		printf("%d ", ((CNumber*)arr._objects[i])->_value);
 	printf("\n");
-
+	}
 
 	system("pause");
 }

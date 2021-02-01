@@ -7,9 +7,11 @@ using namespace std;
 class CShape
 {
 public:
-	virtual void move(int dx, int dy) = NULL;
-	virtual void draw() = NULL;
-	~CShape() {};
+	virtual void move(int dx, int dy) = 0;
+	virtual void draw() = 0;
+	virtual ~CShape() 
+	{
+	};
 };
 
 // a specific object - a point, descends from abstract CShape
@@ -23,18 +25,18 @@ public:
 		printf("CPoint::CPoint(%d, %d)\n", x, y);
 		_x = x;	_y = y;
 	}
-	~CPoint()
-	{
-		printf("CPoint::~CPoint() : deleting (%d, %d)\n", _x, _y);
-	}
-	virtual void move(int dx, int dy)
+	void move(int dx, int dy) override
 	{
 		printf("CPoint::move(%d, %d)\n", dx, dy);
 		_x = _x + dx; _y = _y + dy;
 	}
-	virtual void draw()
+	void draw() override
 	{
 		printf("CPoint::draw() : drawing at (%d, %d)\n", _x, _y);
+	}
+	~CPoint()
+	{
+		printf("CPoint::~CPoint() : deleting (%d, %d)\n", _x, _y);
 	}
 };
 
@@ -57,18 +59,7 @@ public:
 		_maxcount = maxcount; _count = 0;
 		_shapes = new CShape*[_maxcount];
 		for (int i = 0; i < _maxcount; i++)
-			_shapes[i] = NULL;
-	}
-	// destructor
-	~CGroup()
-	{
-		printf("start CGroup::~CGroup()\n");
-		// iterate through all objects and delete them
-		for (int i = 0; i < _count; i++)
-			delete (_shapes[i]);
-		// deallocate the memory
-		delete [] _shapes;
-		printf("finish CGroup::~CGroup()\n");
+			_shapes[i] = nullptr;
 	}
 	// function to add a shape to the group
 	bool addShape(CShape *shape)
@@ -80,10 +71,9 @@ public:
 		_shapes[_count - 1] = shape;
 		return true;
 	}
-	
 	// as CGroup is in the same time CShape, it MUST propose 
 	// its own implementation for virtual void move(int dx, int dy)
-	virtual void move(int dx, int dy)
+	void move(int dx, int dy) override
 	{
 		printf("CGroup::move(%d, %d)\n", dx, dy);
 		// iterate though all objbects and call move()
@@ -92,12 +82,23 @@ public:
 	}
 	// as CGroup is in the same time CShape, it MUST propose 
 	// its own implementation for virtual void draw()
-	virtual void draw()
+	void draw() override
 	{
 		printf("CGroup::draw()\n");
 		// iterate though all objbects and call draw()
 		for (int i = 0; i < _count; i++)
 			_shapes[i] -> draw();
+	}
+	// destructor
+	~CGroup()
+	{
+		printf("start CGroup::~CGroup()\n");
+		// iterate through all objects and delete them
+		for (int i = 0; i < _count; i++)
+			delete (_shapes[i]);
+		// deallocate the memory
+		delete[] _shapes;
+		printf("finish CGroup::~CGroup()\n");
 	}
 };
 

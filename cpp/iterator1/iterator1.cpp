@@ -14,15 +14,18 @@ class CIterator
 {
 public:
 	// move to the first element
-	virtual void first() = NULL;
+	virtual void first() = 0;
 	// get current element
-	virtual int getCurrentItem() = NULL;
+	virtual int getCurrentItem() = 0;
 	// set current element
-	virtual void setCurrentItem(int item) = NULL;
+	virtual void setCurrentItem(int item) = 0;
 	// move to the next element
-	virtual void next() = NULL;
+	virtual void next() = 0;
 	// have we moved out of the elements in the container?
-	virtual bool isEOL() = NULL;
+	virtual bool isEOL() = 0;
+	virtual ~CIterator()
+	{
+	}
 };
 
 // a real concrete container, an array in this case.
@@ -59,6 +62,10 @@ public:
 	// an array may have MULTIPLE iterators. Thus we teach an array to
 	// supply us an appropriate iterator, given the type we want.
 	CIterator *createIterator(char *type);
+	virtual ~CArray()
+	{
+		delete[] _values;
+	}
 };
 
 // an array may have multiple iterators, to iterate values in the array 
@@ -85,28 +92,28 @@ public:
 		_arr = arr;
 		_current_index = 0;
 	}
-	void first()
+	void first() override
 	{
 		_current_index = 0;
 	}
-	int getCurrentItem()
+	int getCurrentItem() override
 	{
 		if (!isEOL())
 			return _arr->getValue(_current_index);
 		else
 			return 0;
 	}
-	void setCurrentItem(int item)
+	void setCurrentItem(int item) override
 	{
 		if (!isEOL())
 			_arr->setValue(_current_index, item);
 	}
-	void next()
+	void next() override
 	{
 		if (!isEOL())
 			_current_index++;
 	}
-	bool isEOL()
+	bool isEOL() override
 	{
 		return _current_index == _arr->getCount();
 	}
@@ -126,7 +133,7 @@ public:
 		_arr = arr;
 		_current_index = 0;
 	}
-	void first()
+	void first() override
 	{
 		_current_index = 0;
 		while (!isEOL() && getCurrentItem() < 0)
@@ -134,19 +141,19 @@ public:
 			_current_index++;
 		}
 	}
-	int getCurrentItem()
+	int getCurrentItem() override
 	{
 		if (!isEOL())
 			return _arr->getValue(_current_index);
 		else
 			return 0;
 	}
-	void setCurrentItem(int item)
+	void setCurrentItem(int item) override
 	{
 		if (!isEOL())
 			_arr->setValue(_current_index, item);
 	}
-	void next()
+	void next() override
 	{
 		if (!isEOL())
 			_current_index++;
@@ -155,7 +162,7 @@ public:
 			_current_index++;
 		}
 	}
-	bool isEOL()
+	bool isEOL() override
 	{
 		return _current_index == _arr->getCount();
 	}

@@ -21,7 +21,7 @@ public:
 	}
 	// saving function first puts the line with
 	// the code of the object, and then information
-	virtual void save(FILE *stream)
+	void save(FILE *stream) override
 	{
 		printf("CPoint::save(FILE *stream)\n");
 		fprintf(stream, "P\n");
@@ -30,7 +30,7 @@ public:
 	// loading function reads the line with information
 	// (line with the code of object should have been 
 	// already read by that time by the factory)
-	virtual void load(FILE *stream)
+	void load(FILE *stream) override
 	{
 		printf("CPoint::load(FILE *stream)\n");
 		fscanf(stream, "%d %d\n", &_x, &_y);
@@ -54,7 +54,7 @@ public:
 	}
 	// saving function first puts the line with
 	// the code of the object, and then information
-	virtual void save(FILE *stream)
+	void save(FILE *stream) override
 	{
 		printf("CCircle::save(FILE *stream)\n");
 		fprintf(stream, "C\n");
@@ -63,7 +63,7 @@ public:
 	// loading function reads the line with information
 	// (line with the code of object should have been 
 	// already read by that time by the factory)
-	virtual void load(FILE *stream)
+	void load(FILE *stream) override
 	{
 		printf("CCircle::load(FILE *stream)\n");
 		fscanf(stream, "%d %d %d\n", &_x, &_y, &_r);
@@ -76,9 +76,9 @@ public:
 class CMyShapeFactory : public CShapeFactory
 {
 public:
-	virtual CShape *createShape(char code)
+	CShape *createShape(char code) override
 	{
-		CShape *shape = NULL;
+		CShape *shape = nullptr;
 		switch (code)
 		{
 			case 'P':
@@ -101,7 +101,7 @@ void main()
 
 	// first, lets prepare the file with two objects
 
-	if ((stream = fopen(filename, "w" )) != NULL)
+	if ((stream = fopen(filename, "w" )) != nullptr)
 	{
 		// write to the file the number of objects: 2
 		fprintf(stream, "%d\n", 2);

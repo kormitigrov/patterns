@@ -6,7 +6,10 @@ class CAnimal
 {
 public:
 	// virtual function clone, which clones nothing
-	virtual CAnimal *clone() = NULL;
+	virtual CAnimal *clone() = 0;
+	virtual ~CAnimal()
+	{
+	}
 };
 
 class CDog : public CAnimal
@@ -41,6 +44,12 @@ void main()
 
 	CAnimal *newAnimal1 = cage[0]->clone(); // CCat created
 	CAnimal *newAnimal2 = cage[1]->clone(); // CDog created
+
+	delete newAnimal1;
+	delete newAnimal2;
+
+	delete cage[0];
+	delete cage[1];
 
 	system("pause");
 }
