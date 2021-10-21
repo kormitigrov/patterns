@@ -18,10 +18,8 @@ private:
 	int value;
 	Handler *next;
 public:
-	DivisionChecker(int _value, Handler *_next)
+	DivisionChecker(int _value, Handler *_next) : value(_value), next(_next)
 	{
-		value = _value;
-		next = _next;
 	}
 	bool handle(int request) override
 	{
