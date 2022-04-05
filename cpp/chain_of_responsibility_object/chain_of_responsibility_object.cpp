@@ -37,6 +37,7 @@ public:
 
 class DefaultHandler : public Handler
 {
+public:
 	bool handle(int request) override
 	{
 		printf("%d is prime\n", request);
