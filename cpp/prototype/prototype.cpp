@@ -17,7 +17,7 @@ public:
 	Animal *clone() override
 	{
 		cout << "Dog::clone()\n";
-		return new Dog();
+		return new Dog(*this);
 	}
 };
 
@@ -28,26 +28,26 @@ public:
 	Animal *clone() override
 	{
 		cout << "Cat::clone()\n";
-		return new Cat();
+		return new Cat(*this);
 	}
 };
 
 void main()
 {
 	// creating prototypes
-	Animal *cage[2] = {new Cat(), new Dog()};
+	Animal *cages[2] = {new Cat(), new Dog()};
 
 	// some time after ... we do not know which concrete object
 	// resides in which cage, but we can create a copy of each
 
-	Animal *newAnimal1 = cage[0]->clone(); // Cat created
-	Animal *newAnimal2 = cage[1]->clone(); // Dog created
+	Animal *newAnimal1 = cages[0]->clone(); // Cat created
+	Animal *newAnimal2 = cages[1]->clone(); // Dog created
 
 	delete newAnimal1;
 	delete newAnimal2;
 
-	delete cage[0];
-	delete cage[1];
+	delete cages[0];
+	delete cages[1];
 
 	system("pause");
 }
