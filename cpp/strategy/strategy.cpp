@@ -3,19 +3,14 @@
 
 using namespace std;
 
-const int cnt = 10;
-
-class MultStrategy
-{
+class MultStrategy {
 public:
-	virtual double multiply(double *arr) = 0;
+	virtual double multiply(double *arr, int cnt) = 0;
 };
 
-class ForwardMultStrategy: public MultStrategy
-{
+class ForwardMultStrategy: public MultStrategy {
 public:
-	double multiply(double *arr) override
-	{
+	double multiply(double *arr, int cnt) override {
 		double res = 1;
 		for (int i = 0; i < cnt; i++)
 			res = res * arr[i];
@@ -23,11 +18,9 @@ public:
 	}
 };
 
-class BackwardMultStrategy: public MultStrategy
-{
+class BackwardMultStrategy: public MultStrategy {
 public:
-	double multiply(double *arr) override
-	{
+	double multiply(double *arr, int cnt) override {
 		double res = 1;
 		for (int i = cnt-1; i >= 0; i--)
 			res = res * arr[i];
@@ -35,31 +28,32 @@ public:
 	}
 };
 
-class Container
-{
+class Container {
 private:
-	double values[cnt];
+	int cnt;
+	double *values;
 public:
 	MultStrategy *strategy;
-	Container()
-	{
+	Container(int _cnt): cnt(_cnt) {
+		values = new double[cnt];
 		for (int i = 0; i < cnt; i++)
 			values[i] = double(rand()) / RAND_MAX + 0.5;
 		strategy = nullptr;
 	}
-	double get_product()
-	{
+	double get_product() {
 		if (strategy != nullptr)
-			return strategy->multiply(values);
+			return strategy->multiply(values, cnt);
 		else
 			return 0;
 	}
+	virtual ~Container() {
+		delete[] values;
+	}
 };
 
-void main()
-{
+void main() {
 	
-	Container container;
+	Container container(10);
 
 	container.strategy = new ForwardMultStrategy();
 	printf("%f\n", container.get_product());

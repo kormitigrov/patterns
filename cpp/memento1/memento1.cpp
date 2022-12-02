@@ -4,8 +4,7 @@
 using namespace std;
 
 // a memento - something that be used to store and retrieve a state of CPoint
-class CMemento
-{
+class CMemento {
 private:
 	// it is a friend of a CPoint class, thus CPoint
 	// can access its private attributes
@@ -13,54 +12,44 @@ private:
 	// actual storage of CPoint data
 	int _x,_y;
 	// a method to set the state of the memento
-	void setState(int x, int y)
-	{
+	void setState(int x, int y) {
 		_x = x;
 		_y = y;
 	}
 	// a method to get the state of the memento
-	void getState(int &x, int &y)
-	{
+	void getState(int &x, int &y) {
 		x = _x;
 		y = _y;
 	}
 public:
 	// CPointMemento has only two public methods, thus data inside
 	// is invisible to anybody, but to its friend, CPoint
-	CMemento()
-	{
+	CMemento() {
 		_x = 0; _y = 0;
 	}
-	virtual ~CMemento()
-	{
-	};
+	virtual ~CMemento() { };
 };
 
 // an CPoint, whos state we will change and unchange back
-class CPoint
-{
+class CPoint {
 private:
 	// data of CPoint
 	int _x,_y;
 public:
-	CPoint(int x, int y)
-	{
+	CPoint(int x, int y) {
 		_x = x; _y = y;
 	}
 	// a method to change the state of the object
-	void move(int dx, int dy)
-	{
+	void move(int dx, int dy) {
 		_x = _x + dx; _y = _y + dy;
 	}
 	// a method to report the state of the object
-	void report()
-	{
+	void report() {
 		printf("CPoint is: %d %d\n", _x, _y);
 	}
 	// we can ask a point to write its current state
 	// into new memento object and return it to us
-	virtual CMemento *createMemento()
-	{
+	virtual CMemento *createMemento() {
 		// create a new memento
 		CMemento *memento = new CMemento();
 		// store actual data inside it
@@ -70,18 +59,14 @@ public:
 	}
 	// we can give the object a memento it has created
 	// a long time ago, and to ask it to read its state from memento
-	virtual void updateFromMemento(CMemento *memento)
-	{
+	virtual void updateFromMemento(CMemento *memento) {
 		// read actual data from memento
 		memento -> getState(_x, _y);
 	}
-	virtual ~CPoint()
-	{
-	}
+	virtual ~CPoint() { }
 };
 
-void main()
-{
+void main() {
 
 	// create a CPoint
 	CPoint *p = new CPoint(10,20);

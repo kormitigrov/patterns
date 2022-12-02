@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include <list>
 
 using namespace std;
 
@@ -10,8 +11,7 @@ using namespace std;
 
 // an abstract iterator - something, that allows to retrieve 
 // values from any container sequentially
-class CIterator
-{
+class CIterator {
 public:
 	// move to the first element
 	virtual void first() = 0;
@@ -23,9 +23,7 @@ public:
 	virtual void next() = 0;
 	// have we moved out of the elements in the container?
 	virtual bool isEOL() = 0;
-	virtual ~CIterator()
-	{
-	}
+	virtual ~CIterator() { }
 };
 
 // a real concrete container, an array in this case.
@@ -34,36 +32,30 @@ public:
 // access it using methods CIterator, so we'll make our program 
 // more flexible to future changes (if in the future we would need
 // to replace and array with, say, a hash table).
-class CArray
-{
+class CArray {
 private:
 	int *_values;
 	int _size;
 public:
-	CArray(int size)
-	{
+	CArray(int size) {
 		_size = size;
 		_values = new int[_size];
 	}
-	int getCount()
-	{
+	int getCount() {
 		return _size;
 	}
-	int getValue(int index)
-	{
+	int getValue(int index) {
 		return _values[index];
 	}
-	void setValue(int index, int item)
-	{
+	void setValue(int index, int item) {
 		_values[index] = item;
 	}
 	// one way would be just to derive CArray from CIterator and to
 	// implement methods of CIterator here, but it's not the best way.
 	// an array may have MULTIPLE iterators. Thus we teach an array to
 	// supply us an appropriate iterator, given the type we want.
-	CIterator *createIterator(char *type);
-	virtual ~CArray()
-	{
+	CIterator *createIterator(string);
+	virtual ~CArray() {
 		delete[] _values;
 	}
 };
@@ -79,91 +71,75 @@ public:
 
 
 // iterator that returns all values in the array
-class CRegularArrayIterator : public CIterator
-{
+class CRegularArrayIterator : public CIterator {
 private:
 	// an array iterator holds a link to CArray
 	CArray *_arr;
 	// and an internal counter of the current element
 	int _current_index;
 public:
-	CRegularArrayIterator(CArray *arr)
-	{
+	CRegularArrayIterator(CArray *arr) {
 		_arr = arr;
 		_current_index = 0;
 	}
-	void first() override
-	{
+	void first() override {
 		_current_index = 0;
 	}
-	int getCurrentItem() override
-	{
+	int getCurrentItem() override {
 		if (!isEOL())
 			return _arr->getValue(_current_index);
 		else
 			return 0;
 	}
-	void setCurrentItem(int item) override
-	{
+	void setCurrentItem(int item) override {
 		if (!isEOL())
 			_arr->setValue(_current_index, item);
 	}
-	void next() override
-	{
+	void next() override {
 		if (!isEOL())
 			_current_index++;
 	}
-	bool isEOL() override
-	{
+	bool isEOL() override {
 		return _current_index == _arr->getCount();
 	}
 };
 
 // iterator that returns only positive values in the array
-class CPositiveOnlyArrayIterator : public CIterator
-{
+class CPositiveOnlyArrayIterator : public CIterator {
 private:
 	// an array iterator holds a link to CArray
 	CArray *_arr;
 	// and an internal counter of the current element
 	int _current_index;
 public:
-	CPositiveOnlyArrayIterator(CArray *arr)
-	{
+	CPositiveOnlyArrayIterator(CArray *arr) {
 		_arr = arr;
 		_current_index = 0;
 	}
-	void first() override
-	{
+	void first() override {
 		_current_index = 0;
-		while (!isEOL() && getCurrentItem() < 0)
-		{
+		while (!isEOL() && getCurrentItem() < 0) {
 			_current_index++;
 		}
 	}
-	int getCurrentItem() override
-	{
+	int getCurrentItem() override {
 		if (!isEOL())
 			return _arr->getValue(_current_index);
 		else
 			return 0;
 	}
-	void setCurrentItem(int item) override
-	{
+	void setCurrentItem(int item) override {
 		if (!isEOL())
 			_arr->setValue(_current_index, item);
 	}
-	void next() override
-	{
+	void next() override {
 		if (!isEOL())
 			_current_index++;
-		while (!isEOL() && getCurrentItem() < 0)
-		{
+		while (!isEOL() && getCurrentItem() < 0) {
 			_current_index++;
 		}
 	}
-	bool isEOL() override
-	{
+	bool isEOL() override {
 		return _current_index == _arr->getCount();
 	}
 };
@@ -171,8 +147,7 @@ public:
 // an implementation for CArray :: createIterator method:
 // depending on the string 'type' given, create either
 // one iterator, or another
-CIterator* CArray :: createIterator(char *type)
-{
+CIterator* CArray :: createIterator(string type) {
 	if (type == "REGULAR")
 		return new CRegularArrayIterator(this);
 	else if (type == "POSITIVEONLY")
@@ -181,8 +156,7 @@ CIterator* CArray :: createIterator(char *type)
 		throw "Wrong iterator type!";
 }
 
-void main()
-{
+void main() {
 	
 	// lets create an array
 	CArray arr(10);
@@ -190,8 +164,7 @@ void main()
 	// we have created a container, lets work with it:
 
 	// lets fill the array with values:
-	for (int i = 0; i < arr.getCount(); i++)
-	{
+	for (int i = 0; i < arr.getCount(); i++) {
 		arr.setValue(i, rand() - RAND_MAX / 2);
 	}
 
@@ -207,8 +180,7 @@ void main()
 	
 	// now we may use standard methods of CIterator to access 
 	// elements of our container; 
-	for(it->first(); !it->isEOL(); it->next())
-	{
+	for(it->first(); !it->isEOL(); it->next()) {
 		printf("%d ", it->getCurrentItem());
 	}
 	printf("\n");
@@ -222,8 +194,7 @@ void main()
 	CIterator *it2 = arr.createIterator("POSITIVEONLY");
 	
 	// again, iterate and access
-	for(it2->first(); !it2->isEOL(); it2->next())
-	{
+	for(it2->first(); !it2->isEOL(); it2->next()) {
 		printf("%d ", it2->getCurrentItem());
 	}
 	printf("\n");
@@ -231,6 +202,11 @@ void main()
 	// delete iterators
 	delete it;
 	delete it2;
-	
+
+	//list<int> values(10);
+	//list<int>::iterator i;
+	//for (i = values.begin(); i != values.end(); i++)
+	//	*i = rand();
+
 	system("pause"); 
 }

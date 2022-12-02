@@ -2,51 +2,38 @@
 
 using namespace std;
 
-class CZoo
-{
-private:
-	// a private static variable that holds the only 
-	// existing copy of CZoo 
-	static CZoo *_zoo;
+class Zoo {
 protected:
 	// protected constructor (not available to everyone)
-	CZoo()
-	{
-		cout << "CZoo::CZoo()\n";
+	Zoo() {
+		cout << "Zoo::Zoo()\n";
 	}
 public:
-	// a function, returning the only existing copy of CZoo
-	static CZoo *getInstance()
-	{
-		if (_zoo == nullptr)
-			_zoo = new CZoo();
-		return _zoo;
+	// a function, returning the only existing copy of Zoo
+	static Zoo &get_instance() {
+		static Zoo zoo;
+		return zoo;
 	}
 	// just a function
-	void doSomething()
-	{
-		cout << "CZoo::doSomething()\n";
+	void do_something() {
+		cout << "Zoo::do_something()\n";
 	}
 };
-// a static variable is initialized to nullptr
-CZoo *CZoo::_zoo = nullptr;
 
-//----------------------------
+void main() {
 
-void main()
-{
-	// we can not create objects of class CZoo,
+	// we can not create objects of class Zoo,
 	// so we can not by mistake create several copies
-	//CZoo *zoo1 = new CZoo(); // error! not available
-	//CZoo *zoo2 = new CZoo(); // error! not available
+	//Zoo *zoo1 = new Zoo(); // error! not available
+	//Zoo *zoo2 = new Zoo(); // error! not available
 	
-	// instead, we can use can use getInstance(), that\
-	// always creates the same copy of CZoo,
+	// instead, we can use can use get_instance(), that\
+	// always creates the same copy of Zoo,
 	// note that is was created here with the first call
-	CZoo::getInstance()->doSomething();
+	Zoo::get_instance().do_something();
 	
 	// note that is was NOT created here again, only accessed
-	CZoo::getInstance()->doSomething();
+	Zoo::get_instance().do_something();
 
 	system("pause");
 }

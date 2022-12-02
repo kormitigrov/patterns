@@ -11,22 +11,18 @@ template <class Item> class CIterator;
 // expose its structure. the only way to access elements in the
 // container is to ask it for an iterator
 template <class Item>
-class CContainer
-{
+class CContainer {
 public:
 	// the abstract container can only create an iterator,
 	// which can be used to access its elements
 	virtual CIterator<Item> *createIterator() = 0;
-	virtual ~CContainer()
-	{
-	}
+	virtual ~CContainer() { }
 };
 
 // an abstract iterator - something, that allows to retrieve 
 // objects from the container sequentially
 template <class Item>
-class CIterator
-{
+class CIterator {
 public:
 	// move to the first element
 	virtual void first() = 0;
@@ -38,9 +34,7 @@ public:
 	virtual void next() = 0;
 	// have we moved out of the elements in the list?
 	virtual bool isEOL() = 0;
-	virtual ~CIterator()
-	{
-	}
+	virtual ~CIterator() { }
 };
 
 
@@ -52,39 +46,32 @@ template <class Item> class CArrayIterator;
 // access (get or set) random element:
 // note, it is NOT the the same way as to access with CIterator 
 template <class Item>
-class CArray : public CContainer<Item>
-{
+class CArray : public CContainer<Item> {
 private:
 	Item *_values;
 	int _size;
 public:
-	CArray(int size)
-	{
+	CArray(int size) {
 		_size = size;
 		_values = new Item[_size];
 	}
-	virtual int getCount()
-	{
+	virtual int getCount() {
 		return _size;
 	}
-	virtual Item getValue(int index)
-	{
+	virtual Item getValue(int index) {
 		return _values[index];
 	}
-	virtual void setValue(int index, Item item)
-	{
+	virtual void setValue(int index, Item item) {
 		_values[index] = item;
 	}
 	// of course, we may work with CArray directly through getValue and setValue
 	// if we know that it is CArray, and not merely CContainer, but another way
 	// to access data is to retrieve an iterator first, and access through it
-	virtual CIterator<Item> *createIterator()
-	{
+	virtual CIterator<Item> *createIterator() {
 		// a CArray known which iterator can access its data and creates it here
 		return new CArrayIterator<Item>(this);
 	}
-	virtual ~CArray()
-	{
+	virtual ~CArray() {
 		delete[] _values;
 	}
 };
@@ -92,42 +79,35 @@ public:
 // a concrete array iterator - something, that can retrieve elements from the
 // concrete CArray sequentially, the way it is defined by CIterator
 template <class Item>
-class CArrayIterator : public CIterator<Item>
-{
+class CArrayIterator : public CIterator<Item> {
 private:
 	// an array iterator holds a link to CArray
 	CArray<Item> *_arr;
 	// and an internal counter of the current element
 	int _current_index;
 public:
-	CArrayIterator(CArray<Item> *arr)
-	{
+	CArrayIterator(CArray<Item> *arr) {
 		_arr = arr;
 		_current_index = 0;
 	}
-	void first() override
-	{
+	void first() override {
 		_current_index = 0;
 	}
-	Item getCurrentItem() override
-	{
+	Item getCurrentItem() override {
 		if (!isEOL())
 			return _arr->getValue(_current_index);
 		else
 			return 0;
 	}
-	void setCurrentItem(Item item) override
-	{
+	void setCurrentItem(Item item) override {
 		if (!isEOL())
 			_arr->setValue(_current_index, item);
 	}
-	void next() override
-	{
+	void next() override {
 		if (!isEOL())
 			_current_index++;
 	}
-	bool isEOL() override
-	{
+	bool isEOL() override {
 		return _current_index == _arr->getCount();
 	}
 };
@@ -152,14 +132,12 @@ void main()
 	// elements of our container; here we know nothing about
 	// exact class of 'arr' and 'i' - for us here it's just
 	// an abstract container and abstract class
-	for (i->first(); !i->isEOL(); i->next())
-	{
+	for (i->first(); !i->isEOL(); i->next()) {
 		i->setCurrentItem(rand());
 	}
 
 	// again, iterate and access
-	for (i->first(); !i->isEOL(); i->next())
-	{
+	for (i->first(); !i->isEOL(); i->next()) {
 		printf("%d ", i->getCurrentItem());
 	}
 	printf("\n");

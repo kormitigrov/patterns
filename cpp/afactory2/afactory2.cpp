@@ -8,21 +8,18 @@ using namespace std;
 
 // a concrete object - a point,
 // descends from abstract CShape
-class CPoint : public CShape
-{
+class CPoint : public CShape {
 private:
 	int _x,_y;
 public:
-	CPoint(int x, int y)
-	{
+	CPoint(int x, int y) {
 		printf("CPoint::CPoint(int x, int y)\n");
 		_x = x;
 		_y = y;
 	}
 	// saving function first puts the line with
 	// the code of the object, and then information
-	void save(FILE *stream) override
-	{
+	void save(FILE *stream) override {
 		printf("CPoint::save(FILE *stream)\n");
 		fprintf(stream, "P\n");
 		fprintf(stream, "%d %d\n", _x, _y);
@@ -30,8 +27,7 @@ public:
 	// loading function reads the line with information
 	// (line with the code of object should have been 
 	// already read by that time by the factory)
-	void load(FILE *stream) override
-	{
+	void load(FILE *stream) override {
 		printf("CPoint::load(FILE *stream)\n");
 		fscanf(stream, "%d %d\n", &_x, &_y);
 		printf("_x=%d _y=%d\n", _x, _y);
@@ -40,13 +36,11 @@ public:
 
 // a concrete object - a circle,
 // descends from abstract CShape
-class CCircle : public CShape
-{
+class CCircle : public CShape {
 private:
 	int _x,_y,_r;
 public:
-	CCircle(int x, int y, int r)
-	{
+	CCircle(int x, int y, int r) {
 		printf("CCircle::CCircle(int x, int y, int r)\n");
 		_x = x;
 		_y = y;
@@ -54,8 +48,7 @@ public:
 	}
 	// saving function first puts the line with
 	// the code of the object, and then information
-	void save(FILE *stream) override
-	{
+	void save(FILE *stream) override {
 		printf("CCircle::save(FILE *stream)\n");
 		fprintf(stream, "C\n");
 		fprintf(stream, "%d %d %d\n", _x, _y, _r);
@@ -63,8 +56,7 @@ public:
 	// loading function reads the line with information
 	// (line with the code of object should have been 
 	// already read by that time by the factory)
-	void load(FILE *stream) override
-	{
+	void load(FILE *stream) override {
 		printf("CCircle::load(FILE *stream)\n");
 		fscanf(stream, "%d %d %d\n", &_x, &_y, &_r);
 		printf("_x=%d _y=%d _r=%d\n", _x, _y, _r);
@@ -73,14 +65,11 @@ public:
 
 // a concrete factory, that knows how to create
 // concrete CCircles and CPoints by the code
-class CMyShapeFactory : public CShapeFactory
-{
+class CMyShapeFactory : public CShapeFactory {
 public:
-	CShape *createShape(char code) override
-	{
+	CShape *createShape(char code) override {
 		CShape *shape = nullptr;
-		switch (code)
-		{
+		switch (code) {
 			case 'P':
 				shape = new CPoint(0,0);
 				break;
@@ -93,16 +82,14 @@ public:
 	}
 };
 
-void main()
-{
-	char *filename = "d:\\data.txt";
+void main() {
+	string filename = "d:\\data.txt";
 	FILE *stream;
 	CShape *shape;
 
 	// first, lets prepare the file with two objects
 
-	if ((stream = fopen(filename, "w" )) != nullptr)
-	{
+	if ((stream = fopen(filename.c_str(), "w" )) != nullptr) {
 		// write to the file the number of objects: 2
 		fprintf(stream, "%d\n", 2);
 		// create a shape, ask it to save itself
@@ -130,7 +117,7 @@ void main()
 	
 	// ask the array of shapes to read shapes from the
 	// file, using the factory to create them
-	shapeArray.loadShapes(filename, &factory); 
+	shapeArray.loadShapes(filename, factory); 
 
 	system("pause"); 
 }

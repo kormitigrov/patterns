@@ -2,12 +2,10 @@
 
 using namespace std;
 
-// èñõîäíàÿ ñèòóàöèÿ: äâà êëàññà ñ ïî÷òè èäåíòè÷íûì ìåòîäîì
-class BeforeX
-{
+// Ð¸ÑÑ…Ð¾Ð´Ð½Ð°Ñ ÑÐ¸Ñ‚ÑƒÐ°Ñ†Ð¸Ñ: Ð´Ð²Ð° ÐºÐ»Ð°ÑÑÐ° Ñ Ð¿Ð¾Ñ‡Ñ‚Ð¸ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ‡Ð½Ñ‹Ð¼ Ð¼ÐµÑ‚Ð¾Ð´Ð¾Ð¼
+class BeforeX {
 public:
-	void TemplateMethod()
-	{
+	void TemplateMethod() {
 		printf("1\n");
 		printf("2\n");
 		printf("hello\n");
@@ -15,11 +13,9 @@ public:
 		printf("5\n");
 	}
 };
-class BeforeY
-{
+class BeforeY {
 public:
-	void TemplateMethod()
-	{
+	void TemplateMethod() {
 		printf("1\n");
 		printf("2\n");
 		printf("world\n");
@@ -27,11 +23,9 @@ public:
 		printf("5\n");
 	}
 };
-class BeforeZ
-{
+class BeforeZ {
 public:
-	void TemplateMethod()
-	{
+	void TemplateMethod() {
 		printf("1\n");
 		printf("2\n");
 		printf("!!!\n");
@@ -39,16 +33,12 @@ public:
 		printf("5\n");
 	}
 };
-// ðåøåíèå ïðîáëåìû ïîâòîðÿåìîãî êîäà - âûíåñåíèå øàáëîííîãî ìåòîäà â 
-// ðîäèòåëüñêèé êëàññ è âûäåëåíèå èçìåíÿåìîé ÷àñòè â îòäåëüíûé ìåòîä
-class AfterBase
-{
+// Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ñ‹ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÐµÐ¼Ð¾Ð³Ð¾ ÐºÐ¾Ð´Ð° - Ð²Ñ‹Ð½ÐµÑÐµÐ½Ð¸Ðµ ÑˆÐ°Ð±Ð»Ð¾Ð½Ð½Ð¾Ð³Ð¾ Ð¼ÐµÑ‚Ð¾Ð´Ð° Ð² 
+// Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒÑÐºÐ¸Ð¹ ÐºÐ»Ð°ÑÑ Ð¸ Ð²Ñ‹Ð´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð¸Ð·Ð¼ÐµÐ½ÑÐµÐ¼Ð¾Ð¹ Ñ‡Ð°ÑÑ‚Ð¸ Ð² Ð¾Ñ‚Ð´ÐµÐ»ÑŒÐ½Ñ‹Ð¹ Ð¼ÐµÑ‚Ð¾Ð´
+class AfterBase {
 public:
-	virtual void doSpecific()
-	{
-	}
-	void TemplateMethod()
-	{
+	virtual void doSpecific() { }
+	void TemplateMethod() {
 		printf("1\n");
 		printf("2\n");
 		this->doSpecific();
@@ -56,33 +46,27 @@ public:
 		printf("5\n");
 	}
 };
-class AfterX : public AfterBase
-{
+
+class AfterX : public AfterBase {
 public:
-	void doSpecific() override
-	{
+	void doSpecific() override {
 		printf("hello\n");
 	}
 };
-class AfterY : public AfterBase
-{
+class AfterY : public AfterBase {
 public:
-	void doSpecific() override
-	{
+	void doSpecific() override {
 		printf("world\n");
 	}
 };
-class AfterZ : public AfterBase
-{
+class AfterZ : public AfterBase {
 public:
-	void doSpecific() override
-	{
+	void doSpecific() override {
 		printf("!!!\n");
 	}
 };
 
-void main()
-{
+void main() {
 	printf("\nBEFORE\n");
 	BeforeX *bx = new BeforeX();
 	BeforeY *by = new BeforeY();

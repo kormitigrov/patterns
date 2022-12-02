@@ -5,35 +5,28 @@
 using namespace std;
 
 // an CPoint, whos state we will change and unchange back
-class CPoint
-{
+class CPoint {
 private:
 	// data of CPoint
 	int _x,_y;
 public:
-	CPoint(int x, int y)
-	{
+	CPoint(int x, int y) {
 		printf("CPoint::CPoint(int x, int y)\n");
 		_x = x; _y = y;
 	}
 	// a method to change the state of the object
-	void move(int dx, int dy)
-	{
+	void move(int dx, int dy) {
 		_x = _x + dx; _y = _y + dy;
 	}
 	// a method to report the state of the object
-	void report()
-	{
+	void report() {
 		printf("CPoint is: %d %d\n", _x, _y);
 	}
-	virtual ~CPoint()
-	{
-	}
+	virtual ~CPoint() { }
 };
 
 // an abstract command, that may be performed on a selected CPoint
-class Command
-{
+class Command {
 public:
 	// every command has a main method 'execute'
 	// that should perform an action on the selected CPoint
@@ -43,14 +36,11 @@ public:
 	virtual void unexecute() = 0;
 	// every command can be cloned
 	virtual Command *clone() = 0;
-	virtual ~Command() 
-	{
-	};
+	virtual ~Command() { };
 };
 
 // a concrete command, that moves the point
-class MoveCommand : public Command
-{
+class MoveCommand : public Command {
 private:
 	// the command remembers the selection (the point) it was performed for
 	CPoint *_selection;
@@ -61,51 +51,43 @@ public:
 	// the command is created with dx and dy - that's because we do not
 	// want to create distinct commands MoveLeftCommand, MoveRightCommand,
 	// MoveUpCommand and MoveDownCommand, - though, we could have.
-	MoveCommand(int dx, int dy) 
-	{
+	MoveCommand(int dx, int dy) {
 		printf("MoveCommand::MoveCommand(%d, %d)\n", dx, dy);
 		_dx = dx;
 		_dy = dy;
 		_selection = nullptr;
 	}
 	// when the command executes, it moves the selection
-	virtual void execute(CPoint *selection)
-	{
+	virtual void execute(CPoint *selection) {
 		printf("MoveCommand::execute(CPoint *selection)\n");
 		// remember the selection the command was applied to
 		_selection = selection;
 		// if it is not empty, call method move of the point
-		if (_selection != nullptr)
-		{
+		if (_selection != nullptr) {
 			_selection -> move(_dx, _dy);
 		}
 	}
 	// when the command should be undone, it just inverse-moves the
 	// selection back
-	virtual void unexecute()
-	{
+	virtual void unexecute() {
 		printf("MoveCommand::unexecute()\n");
-		if (_selection != nullptr)
-		{
+		if (_selection != nullptr) {
 			_selection -> move(-_dx, -_dy);
 		}
 	}
 	// cloning means creating new instance of the same command
-	virtual Command *clone()
-	{
+	virtual Command *clone() {
 		printf("MoveCommand::clone()\n");
 		return new MoveCommand(_dx, _dy);
 	}
-	~MoveCommand() override
-	{
+	~MoveCommand() override {
 		printf("MoveCommand::~MoveCommand()\n");
 	}
 };
 
 // ------------------------------------------------------------
 
-void main()
-{
+void main() {
 	printf("Move the point with keys: 'a', 'd', 'w', 's'\n");
 	printf("Undo last action with key: 'z'\n\n");
 
@@ -129,15 +111,13 @@ void main()
 	stack<Command*> history;
 	
 	char key;
-	do
-	{
+	do {
 		// get the next key pressed
 		key = _getch(); 
 		// take the command, associated with key, if there is one
 		Command *command = commands[key];
 		// if there IS a command, associated with a key
-		if (command != nullptr)
-		{
+		if (command != nullptr) {
 			// clone a command - we need to add it to history stack,
 			// so we need a copy of the original command
 			Command *newcommand = command->clone();
@@ -149,8 +129,7 @@ void main()
 		
 		// if the key 'z' is pressed and history stack is not empty
 		// we should undo the last command performed
-		if (key == 'z' && !history.empty())
-		{
+		if (key == 'z' && !history.empty()) {
 			// get the last command
 			Command *lastcommand = history.top();
 			// unexecute it
@@ -166,8 +145,7 @@ void main()
 
 	} while (key != 27);
 
-	while (!history.empty())
-	{
+	while (!history.empty()) {
 		delete history.top();
 		history.pop();
 	}

@@ -4,91 +4,77 @@
 
 using namespace std;
 
-// a subject is something being observed
-class CSubject;
+// an object is something being observed
+class CObject;
 
 // a simple object - an observer: someone, who should be
 // notified when the something changes 
-class CObserver
-{
+class CObserver {
 public:
-	virtual void onSubjectChanged(CSubject *who) = 0;
-	virtual ~CObserver()
-	{
-	}
+	virtual void onSubjectChanged(CObject *who) = 0;
+	virtual ~CObserver() { }
 };
 
 // a simple object, that allows to be observed
-class CSubject
-{
+class CObject {
 private:
 	// a private vector of current observers
 	vector<CObserver*> _observers;
 public:
 	// a method to register an observer - that is, to say that a new observer 
 	// now wants to be notified when the object changes
-	void addObserver(CObserver *o)
-	{
+	void addObserver(CObserver *o) {
 		_observers.push_back(o);
 	}
 	// a method that notifies all current observers
-	void notifyEveryone()
-	{
-		 for (vector<CObserver*>::iterator i = _observers.begin(); i != _observers.end(); i++)
-			(*i) -> onSubjectChanged(this);
+	void notifyEveryone() {
+		for (const auto &o : _observers)
+			o->onSubjectChanged(this);
 	}
-	virtual ~CSubject()
-	{
-	}
+	virtual ~CObject()
+	{ }
 };
 
-// an example of a subject - an Animal in the Zoo,
-class CAnimal : public CSubject
-{
+// an example of an object - an Animal in the Zoo,
+class CAnimal : public CObject {
 public:
 	// last said phrase
-	char *lastsound;
+	string lastsound;
 	// animal name
-	char *name;
+	string name;
 	// constructor
-	CAnimal(char *aname)
-	{
+	CAnimal(string aname) {
 		name = aname;
 		lastsound = "";
 	}
 	// animal performs an action, and every observer is notified
-	void say(char *sound)
-	{
+	void say(string sound) {
 		lastsound = sound;
-		printf("\nCAnimal %s : '%s'\n", name, sound);
+		printf("\nCAnimal %s : '%s'\n", name.c_str(), sound.c_str());
 		// notify every observer that is watching
 		notifyEveryone();
 	}
 };
 
 // an example of an observer - a child in the zoo, watching animals
-class CChild : public CObserver
-{
+class CChild : public CObserver {
 public:
 	// child name
-	char *name;
+	string name;
 	// constructor
-	CChild(char *cname)
-	{
+	CChild(string cname) {
 		name = cname;
 	}
 	// a method which is called for a child when the animal changes,
 	// the animal actually calls this method, passing itself as a parameter,
 	// so the child not only knows THAT something has changed, but
 	// also knows WHO was changed
-	void onSubjectChanged(CSubject *who)
-	{
-		printf("CChild %s : 'Hurray! %s had just said : %s'\n", name, ((CAnimal*)who) -> name, ((CAnimal*)who) -> lastsound);
+	void onSubjectChanged(CObject *who) {
+		printf("CChild %s : 'Hurray! %s had just said : %s'\n", name.c_str(), ((CAnimal*)who)->name.c_str(), ((CAnimal*)who)->lastsound.c_str());
 	}
 };
 
-void main()
-{
+void main() {
 	// create animals
 	CAnimal cat("Zorra");
 	CAnimal dog("Tortilla");

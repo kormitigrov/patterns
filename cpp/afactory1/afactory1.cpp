@@ -3,39 +3,30 @@
 using namespace std;
 
 // an abstract food
-class CFood
-{
+class CFood {
 public:
 	virtual void prepare() = 0;
-	virtual ~CFood()
-	{
-	}
+	virtual ~CFood() { }
 };
 
 // an concrete food - a meat food
-class CMeatFood : public CFood
-{
+class CMeatFood : public CFood {
 public:
-	CMeatFood()
-	{
+	CMeatFood() {
 		cout << "CMeatFood::CMeatFood()\n";
 	}
-	void prepare() override
-	{
+	void prepare() override {
 		cout << "CMeatFood::prepare()\n";
 	}
 };
 
 // an concrete food - a vegetarian food
-class CVegetarianFood : public CFood
-{
+class CVegetarianFood : public CFood {
 public:
-	CVegetarianFood()
-	{
+	CVegetarianFood() {
 		cout << "CVegetarianFood::CVegetarianFood()\n";
 	}
-	void prepare() override
-	{
+	void prepare() override {
 		cout << "CVegetarianFood::prepare()\n";
 	}
 };
@@ -43,26 +34,20 @@ public:
 //----------------------------
 
 // an abstract food factory - an object, that can create abstract food
-class CFoodFactory
-{
+class CFoodFactory {
 public:
 	virtual CFood *createFood() = 0;
-	virtual ~CFoodFactory()
-	{
-	}
+	virtual ~CFoodFactory() { }
 };
 
 // a concrete version of abstract food factory - 
 // a concrete food factory that creates meat food
-class CMeatFoodFactory : public CFoodFactory
-{
+class CMeatFoodFactory : public CFoodFactory {
 public:
-	CMeatFoodFactory()
-	{
+	CMeatFoodFactory() {
 		cout << "CMeatFoodFactory::CMeatFoodFactory()\n";
 	}
-	CFood *createFood() override
-	{
+	CFood *createFood() override {
 		cout << "CMeatFoodFactory::createFood()\n";
 		return new CMeatFood();
 	}
@@ -70,41 +55,32 @@ public:
 
 // another concrete version of abstract food factory - 
 // a concrete food factory that creates vegetarian food
-class CVegetarianFoodFactory : public CFoodFactory
-{
+class CVegetarianFoodFactory : public CFoodFactory {
 public:
-	CVegetarianFoodFactory()
-	{
+	CVegetarianFoodFactory() {
 		cout << "CVegetarianFoodFactory::CVegetarianFoodFactory()\n";
 	}
-	CFood *createFood() override
-	{
+	CFood *createFood() override {
 		cout << "CVegetarianFoodFactory::createFood()\n";
 		return new CVegetarianFood();
 	}
 };
 
 // just a sample class of a sample animal to feed
-class CAnimal
-{
+class CAnimal {
 public:
-	CAnimal()
-	{
+	CAnimal() {
 		cout << "CAnimal::CAnimal()\n";
 	}
-	virtual void feedWith(CFood *food)
-	{
+	virtual void feedWith(CFood *food) {
 		cout << "CAnimal::feed()\n";
 	}
-	virtual ~CAnimal()
-	{
-	}
+	virtual ~CAnimal() { }
 };
 
 //----------------------------
 
-void main()
-{
+void main() {
 	// creating a factory of food - 
 	// either CMeatFoodFactory or CVegetarianFoodFactory 
 	CFoodFactory *factory;
